@@ -1,0 +1,14 @@
+Package: hotspotAnnotator
+Type: Package
+Title: Annotate mutational hotspots
+Version: 1.0
+Date: 2018-06-22
+Author: Alex Gorelick
+Maintainer: Alex Gorelick <gorelica@mskcc.org>
+Description: Load hotspots data (snp, splice site and indels) and annotate MAF-like data.
+License: MIT 
+RoxygenNote: 6.0.1
+Depends:
+    R (>= 3.0.0),
+    data.table
+    
