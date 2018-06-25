@@ -10,6 +10,8 @@ annotate_hotspots <- function(maf,min_indel_overlap=0.5) {
     indel_hotspots <- hotspots[hotspots$type=='indel',c('Hugo_Symbol','hotspot','start','end'),with=F]
     setkey(indel_hotspots,'Hugo_Symbol','start','end')
     maf$mutation <- paste(maf$Hugo_Symbol,gsub('p[.]','',maf$HGVSp_Short))
+    maf_original <- maf
+    maf <- maf[maf$HGVSp_Short!='',]
 
     ## snp hotspots
     d_snp <- maf[maf$HGVSp_Short!='.' & maf$Variant_Classification %in% c('Missense_Mutation','Nonsense_Mutation'),c('Hugo_Symbol','HGVSp_Short'),with=F]
@@ -117,10 +119,11 @@ annotate_hotspots <- function(maf,min_indel_overlap=0.5) {
     result <- result[!duplicated(result$mutation.orig),]
 
     names(result) <- c('mutation','hotspot_class','hotspot_type','hotspot')
-    maf_annotated <- merge(maf,result,by='mutation',all.x=T)
+    maf_annotated <- merge(maf_original,result,by='mutation',all.x=T)
     maf_annotated$hotspot_class[is.na(maf_annotated$hotspot_class)] <- ''
     maf_annotated$hotspot_type[is.na(maf_annotated$hotspot_type)] <- ''
     maf_annotated$hotspot[is.na(maf_annotated$hotspot)] <- ''
+    maf_annotated[,mutation:=NULL]
     maf_annotated
 } 
 
