@@ -1,6 +1,6 @@
-##' annotate_hotspots
+##' hotspot_annotator
 ##' @export 
-annotate_hotspots <- function(maf,min_indel_overlap=0.5) {
+hotspot_annotator <- function(maf,min_indel_overlap=0.5) {
     ## this function will annotate hotspot SNP, Splice Site, and Indels in the MAF with Taylor Lab published hotspots
     require(data.table)
     data(hotspots)

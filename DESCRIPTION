@@ -1,4 +1,4 @@
-Package: hotspotAnnotator
+Package: hotspot_annotator
 Type: Package
 Title: Annotate mutational hotspots
 Version: 1.0
