@@ -52,10 +52,13 @@ annotate_hotspots <- function(maf,min_indel_overlap=0.5) {
     if(nrow(d_indel)==0) {
         message('No in-frame INDELs found!')
         d_indel <- as.data.table(matrix(nrow=0,ncol=6))
-        names(d_indel) <- c('Hugo_Symbol','mutation','mutation.orig','claindel','type','hotspot')
+        names(d_indel) <- c('Hugo_Symbol','mutation','mutation.orig','class','type','hotspot')
     } else {
         message('Annotating in-frame INDEL hotspots ...')
         d_indel$mutation.orig <- paste(d_indel$Hugo_Symbol,gsub('p[.]','',d_indel$HGVSp_Short))
+        ## change p.T454_Q455>Q -> p.T454_Q455 to extract the start/end amino acid positions
+        f <- function(x) as.list(x[[1]])
+        d_indel$HGVSp_Short <- rbindlist(lapply(strsplit(d_indel$HGVSp_Short,'>'),f))[[1]]
         indels <- gsub('p[.]','',d_indel$HGVSp_Short)
         prune_delins <- function(s) unlist(strsplit(s,'delins'))[1]
         prune_del <- function(s) unlist(strsplit(s,'del'))[1]
@@ -114,7 +117,7 @@ annotate_hotspots <- function(maf,min_indel_overlap=0.5) {
     }
 
     ## merge annotated hotspots
-    result <- rbind(d_snp,d_ss,d_indel)
+    result <- rbind(d_snp,d_ss,d_indel,fill=T)
     result[,c('Hugo_Symbol','mutation'):=NULL]
     result <- result[!duplicated(result$mutation.orig),]
 
